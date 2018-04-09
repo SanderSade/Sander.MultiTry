@@ -95,7 +95,7 @@ namespace Sander.MultiTry.Tests
 		public void DefaultResult()
 		{
 			var options = MultiTryOptions<int>.Default;
-			options.OnFinalFailure = () => 42;
+			options.OnFinalFailure = x => 42;
 
 			var result = MultiTry.Try(() => throw new ApplicationException(), options);
 			Trace.WriteLine(result);
@@ -108,6 +108,17 @@ namespace Sander.MultiTry.Tests
 		{
 			var options = MultiTryOptions<bool>.Default;
 			options.ExceptionFilter = ex => ex.GetType() == typeof(NotImplementedException);
+
+			var result = MultiTry.Try(() => throw new ApplicationException(), options);
+			Assert.IsFalse(result);
+		}
+
+		[ExpectedException(typeof(InvalidCastException))]
+		[TestMethod]
+		public void ErrorInFilter()
+		{
+			var options = MultiTryOptions<bool>.Default;
+			options.ExceptionFilter = ex => throw new InvalidCastException();
 
 			var result = MultiTry.Try(() => throw new ApplicationException(), options);
 			Assert.IsFalse(result);

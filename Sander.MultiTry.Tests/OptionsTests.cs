@@ -15,18 +15,6 @@ namespace Sander.MultiTry.Tests
 		}
 
 
-		[ExpectedException(typeof(ArgumentNullException))]
-		[TestMethod]
-		public void NullExceptionFilter()
-		{
-			var options = MultiTryOptions<bool>.Default;
-			options.ExceptionFilter = null;
-
-			options.Validate();
-
-			Assert.IsNotNull(options);
-		}
-
 
 		[ExpectedException(typeof(ArgumentNullException))]
 		[TestMethod]
