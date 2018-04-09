@@ -90,3 +90,9 @@ options.OnFinalFailure = ex => {
 	return 0; //makes compiler happy
 }
 ```
+* **Why use MultiTry over Microsoft Enterprise Library [Transient Fault Handling Block](https://msdn.microsoft.com/en-us/library/hh680934(v=pandp.50).aspx)?**
+  - Enterprise Library is not available for .NET Core
+  - No longer maintained or updated
+  - Elephant when you need a butterfly
+  - Complex to configure, overkill for most common scenarios
+  
