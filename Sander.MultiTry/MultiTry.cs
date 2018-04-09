@@ -30,7 +30,7 @@ namespace Sander.MultiTry
 				{
 					lastException = ex;
 
-					if (options.OnExceptionCallback?.Invoke(ex, i) == true)
+					if (options.OnExceptionCallback?.Invoke(ex, i) == false)
 						break;
 				}
 
@@ -67,7 +67,7 @@ namespace Sander.MultiTry
 				{
 					lastException = ex;
 
-					if (options.OnExceptionCallback?.Invoke(ex, i) == true)
+					if (options.OnExceptionCallback?.Invoke(ex, i) == false)
 						break;
 				}
 
@@ -109,7 +109,7 @@ namespace Sander.MultiTry
 				{
 					lastException = ex;
 
-					if (options.OnExceptionCallback?.Invoke(ex, i) == true)
+					if (options.OnExceptionCallback?.Invoke(ex, i) == false)
 						break;
 				}
 

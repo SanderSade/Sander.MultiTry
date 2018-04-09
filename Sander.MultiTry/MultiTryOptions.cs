@@ -23,10 +23,10 @@ namespace Sander.MultiTry
 		/// <summary>
 		/// Optional callback to execute when exception occurs.
 		/// <para>Use this for logging or exception-specific handling</para>
-		/// <para>Return true to exit the retry loop and execute <see cref="OnFinalFailure"/> immediately.</para>
+		/// <para>Return false to exit the retry loop and execute <see cref="OnFinalFailure"/> immediately, true to continue retries</para>
 		/// <para>Exception is the current exception, int is 0-based attempt number</para>
 		/// <example>(ex, i) => { Trace.WriteLine($"Attempt: {i}, exception: {ex.Message}"
-		///		return false;
+		///		return true;
 		/// });</example>
 		/// </summary>
 		public Func<Exception, int, bool> OnExceptionCallback { get; set; }

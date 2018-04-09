@@ -15,18 +15,18 @@ namespace Sander.MultiTry.Tests
 			var options = MultiTryOptions<bool>.Default;
 
 			options.OnExceptionCallback = (exception, i) =>
-										  {
-											  Trace.WriteLine($"{i}: {exception.Message}");
-											  Assert.IsNotNull(exception);
-											  Assert.IsTrue(i >= 0 && i < 3);
-											  return false;
-										  };
+			                              {
+				                              Trace.WriteLine($"{i}: {exception.Message}");
+				                              Assert.IsNotNull(exception);
+				                              Assert.IsTrue(i >= 0 && i < 3);
+				                              return false;
+			                              };
 			options.Delay = 0;
 
 			var result = MultiTry.Try(() => throw new ApplicationException(), options);
 			Assert.IsFalse(result);
-
 		}
+
 
 		[TestMethod]
 		public void BasicRunAsync()
@@ -34,19 +34,19 @@ namespace Sander.MultiTry.Tests
 			var options = MultiTryOptions<bool>.Default;
 
 			options.OnExceptionCallback = (exception, i) =>
-										  {
-											  Trace.WriteLine($"{i}: {exception.Message}");
-											  Assert.IsNotNull(exception);
-											  Assert.IsTrue(i >= 0 && i < 3);
-											  return false;
-										  };
+			                              {
+				                              Trace.WriteLine($"{i}: {exception.Message}");
+				                              Assert.IsNotNull(exception);
+				                              Assert.IsTrue(i >= 0 && i < 3);
+				                              return false;
+			                              };
 			options.Delay = 0;
 
 			var func = new Func<Task<bool>>(async () =>
-								{
-									await Task.Delay(100);
-									throw new ApplicationException();
-								});
+			                                {
+				                                await Task.Delay(100);
+				                                throw new ApplicationException();
+			                                });
 
 			var result = MultiTry.TryAsync(func, options).Result;
 			Assert.IsFalse(result);
@@ -70,10 +70,10 @@ namespace Sander.MultiTry.Tests
 			                              {
 				                              Trace.WriteLine($"{i}: {ex.Message}");
 
-											  if (i == 1)
+				                              if (i == 1)
 					                              ExceptionDispatchInfo.Capture(ex)?.Throw();
 
-				                              return false;
+				                              return true;
 			                              };
 
 			var result = MultiTry.Try(() => throw new ApplicationException(), options);
@@ -102,6 +102,7 @@ namespace Sander.MultiTry.Tests
 			Assert.AreEqual(result, 42);
 		}
 
+
 		[ExpectedException(typeof(ApplicationException))]
 		[TestMethod]
 		public void ApplyFilter()
@@ -112,6 +113,7 @@ namespace Sander.MultiTry.Tests
 			var result = MultiTry.Try(() => throw new ApplicationException(), options);
 			Assert.IsFalse(result);
 		}
+
 
 		[ExpectedException(typeof(InvalidCastException))]
 		[TestMethod]
@@ -133,5 +135,24 @@ namespace Sander.MultiTry.Tests
 		}
 
 
+		[ExpectedException(typeof(ApplicationException))]
+		[TestMethod]
+		public void OnFinalRethrow()
+		{
+			var options = MultiTryOptions<int>.Default;
+			options.OnFinalFailure = ex =>
+			                         {
+				                         ExceptionDispatchInfo.Capture(ex)?.Throw();
+				                         return 42;
+			                         };
+
+			options.OnExceptionCallback = (ex, i) =>
+			                              {
+				                              Trace.WriteLine($"{i}: {ex.Message}");
+				                              return false;
+			                              };
+
+			MultiTry.Try(() => throw new ApplicationException(), options);
+		}
 	}
 }
