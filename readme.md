@@ -32,7 +32,7 @@ var result = MultiTry.Try(() => MyMethod(1, "a", false), options);
 
 See the documentation for "[when in a catch statement](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/when#when-in-a-catch-statement)".
 
-ExceptionFilter can be any expression or method which returns boolean. Note that an error inside the exception filter will not be handled, and will propagate to caller.
+ExceptionFilter can be any expression or method which returns boolean. Note that an error inside the exception filter will not be handled, and will propagate to the caller.
 
 Simple function or method:
 ```
@@ -85,7 +85,8 @@ options.OnExceptionCallback = (ex, i) =>
 Use OnFinalFailure:
 ```
 var options = MultiTryOptions<int>.Default;
-options.OnFinalFailure = ex => {
+options.OnFinalFailure = ex =>
+{
 	throw new MyCustomApplicationException("Error");
 	return 0; //makes compiler happy
 }
