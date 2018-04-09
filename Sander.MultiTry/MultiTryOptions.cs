@@ -8,7 +8,7 @@ namespace Sander.MultiTry
 
 		public Func<Exception, int, bool> OnExceptionCallback { get; set; }
 
-		public Func<T> OnFinalFailure { get; set; }
+		public Func<T> OnFinalFailure { get; set; } = () => default(T);
 
 		public uint TryCount { get; set; } = 3;
 
@@ -24,7 +24,7 @@ namespace Sander.MultiTry
 					ExceptionFilter = x => true,
 					OnFinalFailure = () => default(T),
 					TryCount = 3,
-					Delay = 3000
+					Delay = 0
 				};
 
 				return options;
@@ -34,7 +34,7 @@ namespace Sander.MultiTry
 		public void Validate()
 		{
 			if (ExceptionFilter == null)
-				throw new ArgumentNullException($"{nameof(ExceptionFilter)}cannot be null!");
+				ExceptionFilter = x => true;
 
 
 			if (OnFinalFailure == null)
