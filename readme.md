@@ -7,10 +7,47 @@ Work in progress.
 
 
 ## Features
+* Easy to use
+* Supports both functions (returns result) and actions (no return value)
+* Supports async functions
+* Configurable exception filtering and handling
+* Configurable number of retries
+* Configurable delay between attempts
+* .NET Standard 2.0, meaning MultiTry can be used with .NET Framework 4.6.1+, .NET Core 2.0 and more - see [here](https://github.com/dotnet/standard/blob/master/docs/versions.md) for detailed information.
 
 
 ## Examples
+Simplest possible use case:  
+`UserInfo userInfo = MultiTry.Try(() => GetUserInfo(userId))`
 
+This executes method GetUserInfo() with the default settings, meaning:
+* 3 attempts to execute GetUserInfo()
+* No delay between the attempts
+* If all retries get an exception, Try returns `default(UserInfo)` (null if UserInfo is class).
+
+A more complex example with exception filtering and logging:
+```
+var options = MultiTryOptions<UserInfo>.Default;
+//delay 1000 ms between attempts
+options.Delay = 1000;
+//try up to five times
+options.TryCount = 5;
+//retry only if the exception is SqlException
+options.ExceptionFilter = ex => ex.GetType() == typeof(SqlException);
+//log exception information
+options.OnExceptionCallback = (ex, i) =>
+{
+	Trace.WriteLine($"Attempt {i}: {ex}");
+	return true; //continue attempts	
+};
+//if all retries fail, create a new user and return that
+options.OnFinalFailure = ex =>
+{
+  return new UserInfo { UserId = userId, IsNew = true }; 
+};
+
+var userInfo = MultiTry.Try(() => GetUserInfo(userId), options);
+```
 
 ## FAQ
 
@@ -52,6 +89,7 @@ options.ExceptionFilter = ex =>
 		case SqlException sql: //transient, retry
 			return true;
 		case SomeOtherTransientException sot:
+			DoSomething(sot);
 			return true;	
 		default: //don't retry
 			return false;
@@ -69,7 +107,7 @@ options.OnExceptionCallback = (ex, i) =>
 	switch (ex)
 	{
 		case SqlException sql: //transient - wait and retry
-			Tread.Sleep(i * 1000); //wait more and more before retrying
+			Tread.Sleep((i + 1) * 1000); //wait more and more before retrying
 			return true;
 		case AuthenticationException auth: //get new authentication and then retry
 			UpdateAuthentication();
@@ -80,7 +118,7 @@ options.OnExceptionCallback = (ex, i) =>
 };
 ```
 
-* **How to throw a specific unhandled exception when all attempts fail?**
+* **How to throw a specific exception when all attempts fail?**
 
 Use OnFinalFailure:
 ```
