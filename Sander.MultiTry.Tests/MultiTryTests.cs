@@ -14,7 +14,7 @@ namespace Sander.MultiTry.Tests
 		{
 			var options = MultiTryOptions<bool>.Default;
 
-			options.OnExceptionCallback = (exception, i) =>
+			options.OnException = (exception, i) =>
 			                              {
 				                              Trace.WriteLine($"{i}: {exception.Message}");
 				                              Assert.IsNotNull(exception);
@@ -33,7 +33,7 @@ namespace Sander.MultiTry.Tests
 		{
 			var options = MultiTryOptions<bool>.Default;
 
-			options.OnExceptionCallback = (exception, i) =>
+			options.OnException = (exception, i) =>
 			                              {
 				                              Trace.WriteLine($"{i}: {exception.Message}");
 				                              Assert.IsNotNull(exception);
@@ -66,7 +66,7 @@ namespace Sander.MultiTry.Tests
 		public void ThrowOnSpecificCallback()
 		{
 			var options = MultiTryOptions<bool>.Default;
-			options.OnExceptionCallback = (ex, i) =>
+			options.OnException = (ex, i) =>
 			                              {
 				                              Trace.WriteLine($"{i}: {ex.Message}");
 
@@ -85,7 +85,7 @@ namespace Sander.MultiTry.Tests
 		public void NullCallback()
 		{
 			var options = MultiTryOptions<bool>.Default;
-			options.OnExceptionCallback = null;
+			options.OnException = null;
 			var result = MultiTry.Try(() => throw new ApplicationException(), options);
 			Assert.IsFalse(result);
 		}
@@ -146,7 +146,7 @@ namespace Sander.MultiTry.Tests
 				                         return 42;
 			                         };
 
-			options.OnExceptionCallback = (ex, i) =>
+			options.OnException = (ex, i) =>
 			                              {
 				                              Trace.WriteLine($"{i}: {ex.Message}");
 				                              return false;

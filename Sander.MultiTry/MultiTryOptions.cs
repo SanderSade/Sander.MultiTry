@@ -29,7 +29,7 @@ namespace Sander.MultiTry
 		///		return true;
 		/// });</example>
 		/// </summary>
-		public Func<Exception, int, bool> OnExceptionCallback { get; set; }
+		public Func<Exception, int, bool> OnException { get; set; }
 
 		/// <summary>
 		/// How many times try the execution? Defaults to 3.

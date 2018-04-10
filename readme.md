@@ -28,26 +28,35 @@ This executes method GetUserInfo() with the default settings, meaning:
 A more complex example with exception filtering and logging:
 ```
 var options = MultiTryOptions<UserInfo>.Default;
+
 //delay 1000 ms between attempts
 options.Delay = 1000;
+
 //try up to five times
 options.TryCount = 5;
+
 //retry only if the exception is SqlException
 options.ExceptionFilter = ex => ex.GetType() == typeof(SqlException);
+
 //log exception information
-options.OnExceptionCallback = (ex, i) =>
+options.OnException = (ex, i) =>
 {
 	Trace.WriteLine($"Attempt {i}: {ex}");
 	return true; //continue attempts	
 };
+
 //if all retries fail, create a new user and return that
 options.OnFinalFailure = ex =>
 {
-  return new UserInfo { UserId = userId, IsNew = true }; 
+	Trace.WriteLine($"Creating a new user with id {userId}. Fetching user failed with exception {ex}.";
+	return new UserInfo { UserId = userId, IsNew = true }; 
 };
 
 var userInfo = MultiTry.Try(() => GetUserInfo(userId), options);
 ```
+
+There is also a full commented example in tests, [FullExample.cs](https://github.com/SanderSade/Sander.MultiTry/blob/master/Sander.MultiTry.Tests/FullExample.cs).
+
 
 ## FAQ
 
@@ -101,7 +110,7 @@ options.ExceptionFilter = ex =>
 
 ```
 var options = MultiTryOptions<int>.Default;
-options.OnExceptionCallback = (ex, i) =>
+options.OnException = (ex, i) =>
 {
 	Trace.WriteLine($"Attempt {i}: {ex.Message}");
 	switch (ex)
