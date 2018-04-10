@@ -5,14 +5,16 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Sander Säde</Authors>
     <Product>MultiTry</Product>
+	<Title>MultiTry</Title>
     <Copyright>© Sander Säde 2018</Copyright>
     <PackageLicenseUrl>https://github.com/SanderSade/Sander.MultiTry/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/SanderSade/Sander.MultiTry/</PackageProjectUrl>
     <PackageIconUrl>https://img.shields.io/badge/Multi-Try-green.svg</PackageIconUrl>
     <RepositoryUrl>https://github.com/SanderSade/Sander.MultiTry/</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>transient-error multi-try retry error-handling exception-handling</PackageTags>
+    <PackageTags>transient-error multi-try retry error-handling exception-handling transient-exception</PackageTags>
     <Description>There are great many operations which can have transient errors, such as network requests, database operations and many more. In case of a transient exception, the operation usually needs to be retried.
+
 MultiTry is created to reduce the amount of boilerplate code that needs to be written for such operations. The goal was to have an easy-to-use, but yet flexible and powerful re-try mechanism, which supports exception filtering, handling and re-throwing.
 </Description>
   </PropertyGroup>

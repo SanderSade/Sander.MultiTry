@@ -1,6 +1,6 @@
 [![GitHub license](https://img.shields.io/badge/licence-MPL%202.0-brightgreen.svg)](https://github.com/SanderSade/UrlShortener/blob/master/LICENSE)
 [![NetStandard 2.0](https://img.shields.io/badge/-.NET%20Standard%202.0-green.svg)](https://github.com/dotnet/standard/blob/master/docs/versions/netstandard2.0.md)
-
+[![NuGet v1.0.0](https://img.shields.io/badge/NuGet-v1.0.0-lightgrey.svg)](https://www.nuget.org/packages/Sander.MultiTry/)
 
 ## Introduction
 There are great many operations which can have transient errors, such as network requests, database operations and many more. In case of a transient exception, the operation usually needs to be retried.
