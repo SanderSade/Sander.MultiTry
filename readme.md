@@ -1,16 +1,18 @@
 [![GitHub license](https://img.shields.io/badge/licence-MPL%202.0-brightgreen.svg)](https://github.com/SanderSade/UrlShortener/blob/master/LICENSE)
 [![NetStandard 2.0](https://img.shields.io/badge/-.NET%20Standard%202.0-green.svg)](https://github.com/dotnet/standard/blob/master/docs/versions/netstandard2.0.md)
 
-Work in progress.
 
 ## Introduction
+There are great many operations which can have transient errors, such as network requests, database operations and many more. In case of a transient exception, the operation usually needs to be retried.
+
+MultiTry is created to reduce the amount of boilerplate code that needs to be written for such operations. The goal was to have an easy-to-use, but yet flexible and powerful re-try mechanism, which supports exception filtering, handling and re-throwing - see examples below.
 
 
 ## Features
 * Easy to use
 * Supports both functions (returns result) and actions (no return value)
 * Supports async functions
-* Configurable exception filtering and handling
+* Optional exception filtering
 * Configurable number of retries
 * Configurable delay between attempts
 * .NET Standard 2.0, meaning MultiTry can be used with .NET Framework 4.6.1+, .NET Core 2.0 and more - see [here](https://github.com/dotnet/standard/blob/master/docs/versions.md) for detailed information.
@@ -23,7 +25,7 @@ Simplest possible use case:
 This executes method GetUserInfo() with the default settings, meaning:
 * 3 attempts to execute GetUserInfo()
 * No delay between the attempts
-* If all retries get an exception, Try returns `default(UserInfo)` (null if UserInfo is class).
+* If all retries get an exception, Try returns `default(UserInfo)` (null if UserInfo is a class).
 
 A more complex example with exception filtering and logging:
 ```
@@ -144,3 +146,5 @@ options.OnFinalFailure = ex =>
   - Elephant when you need a butterfly
   - Complex to configure, overkill for most common scenarios
   
+## Changelog
+* 1.0.0 Initial release
