@@ -152,4 +152,6 @@ I recommend using Polly if you have more complex scenarios than MultiTry is inte
   
 ## Changelog
 * 1.0.0 Initial release
-* 1.0.1 Adding MultiTry.Rethrow() (re-throwing exception while keeping the original context)
+* 1.0.1 
+  - Added MultiTry.Rethrow() (re-throwing exception while keeping the original context)
+  - Set the default culture to Invariant Language (Invariant Country)

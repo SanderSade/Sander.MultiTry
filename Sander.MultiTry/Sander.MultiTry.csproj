@@ -15,8 +15,10 @@
     <PackageTags>transient-error multi-try retry error-handling exception-handling transient-exception</PackageTags>
     <Description>There are great many operations which can have transient errors, such as network requests, database operations and many more. In case of a transient exception, the operation usually needs to be retried.
 
-MultiTry is created to reduce the amount of boilerplate code that needs to be written for such operations. The goal was to have an easy-to-use, but yet flexible and powerful re-try mechanism, which supports exception filtering, handling and re-throwing.
-</Description>
+MultiTry is created to reduce the amount of boilerplate code that needs to be written for such operations. The goal was to have an easy-to-use, but yet flexible and powerful re-try mechanism, which supports exception filtering, handling and re-throwing.</Description>
+    <Version>1.0.1</Version>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+    <NeutralLanguage />
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
