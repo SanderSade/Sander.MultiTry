@@ -54,7 +54,7 @@ namespace Sander.MultiTry.Tests
 			//if all attempts have failed, let's rethrow the exception, with proper stacktrace
 			options.OnFinalFailure = ex =>
 									 {
-										 ExceptionDispatchInfo.Capture(ex)?.Throw();
+										 MultiTry.Rethrow(ex);
 										 return null; //make compiler happy
 									 };
 
