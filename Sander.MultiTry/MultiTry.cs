@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -50,7 +51,7 @@ namespace Sander.MultiTry
 		/// <typeparam name="T">Return type</typeparam>
 		/// <param name="function">Async function to execute. Required</param>
 		/// <param name="options">Retry options. Can be null, see <see cref="MultiTryOptions{T}"/> for defaults</param>
-		/// <returns><param name="function">function</param> result or value specified in <see cref="MultiTryOptions{T}.OnFinalFailure"/></returns>
+		/// <returns>function result or value specified in <see cref="MultiTryOptions{T}.OnFinalFailure"/></returns>
 		public static async Task<T> TryAsync<T>(Func<Task<T>> function, MultiTryOptions<T> options = null)
 		{
 			options = Validate(function, options);
@@ -120,6 +121,14 @@ namespace Sander.MultiTry
 			} while (i < options.TryCount);
 
 			options.OnFinalFailure?.Invoke(lastException);
+		}
+
+		/// <summary>
+		/// Re-throw exception with the original state
+		/// </summary>
+		public static void Rethrow(Exception ex)
+		{
+			ExceptionDispatchInfo.Capture(ex)?.Throw();
 		}
 
 

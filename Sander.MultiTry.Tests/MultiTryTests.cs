@@ -15,12 +15,12 @@ namespace Sander.MultiTry.Tests
 			var options = MultiTryOptions<bool>.Default;
 
 			options.OnException = (exception, i) =>
-			                              {
-				                              Trace.WriteLine($"{i}: {exception.Message}");
-				                              Assert.IsNotNull(exception);
-				                              Assert.IsTrue(i >= 0 && i < 3);
-				                              return false;
-			                              };
+										  {
+											  Trace.WriteLine($"{i}: {exception.Message}");
+											  Assert.IsNotNull(exception);
+											  Assert.IsTrue(i >= 0 && i < 3);
+											  return false;
+										  };
 			options.Delay = 0;
 
 			var result = MultiTry.Try(() => throw new ApplicationException(), options);
@@ -34,19 +34,19 @@ namespace Sander.MultiTry.Tests
 			var options = MultiTryOptions<bool>.Default;
 
 			options.OnException = (exception, i) =>
-			                              {
-				                              Trace.WriteLine($"{i}: {exception.Message}");
-				                              Assert.IsNotNull(exception);
-				                              Assert.IsTrue(i >= 0 && i < 3);
-				                              return false;
-			                              };
+										  {
+											  Trace.WriteLine($"{i}: {exception.Message}");
+											  Assert.IsNotNull(exception);
+											  Assert.IsTrue(i >= 0 && i < 3);
+											  return false;
+										  };
 			options.Delay = 0;
 
 			var func = new Func<Task<bool>>(async () =>
-			                                {
-				                                await Task.Delay(100);
-				                                throw new ApplicationException();
-			                                });
+											{
+												await Task.Delay(100);
+												throw new ApplicationException();
+											});
 
 			var result = MultiTry.TryAsync(func, options).Result;
 			Assert.IsFalse(result);
@@ -67,14 +67,14 @@ namespace Sander.MultiTry.Tests
 		{
 			var options = MultiTryOptions<bool>.Default;
 			options.OnException = (ex, i) =>
-			                              {
-				                              Trace.WriteLine($"{i}: {ex.Message}");
+										  {
+											  Trace.WriteLine($"{i}: {ex.Message}");
 
-				                              if (i == 1)
-					                              ExceptionDispatchInfo.Capture(ex)?.Throw();
+											  if (i == 1)
+												  ExceptionDispatchInfo.Capture(ex)?.Throw();
 
-				                              return true;
-			                              };
+											  return true;
+										  };
 
 			var result = MultiTry.Try(() => throw new ApplicationException(), options);
 			Assert.IsFalse(result);
@@ -141,18 +141,56 @@ namespace Sander.MultiTry.Tests
 		{
 			var options = MultiTryOptions<int>.Default;
 			options.OnFinalFailure = ex =>
-			                         {
-				                         ExceptionDispatchInfo.Capture(ex)?.Throw();
-				                         return 42;
-			                         };
+									 {
+										 ExceptionDispatchInfo.Capture(ex)?.Throw();
+										 return 42;
+									 };
 
 			options.OnException = (ex, i) =>
-			                              {
-				                              Trace.WriteLine($"{i}: {ex.Message}");
-				                              return false;
-			                              };
+										  {
+											  Trace.WriteLine($"{i}: {ex.Message}");
+											  return false;
+										  };
 
 			MultiTry.Try(() => throw new ApplicationException(), options);
 		}
+
+
+
+		[TestMethod]
+		public void RethrowStack()
+		{
+			var options = MultiTryOptions<int>.Default;
+			options.OnFinalFailure = ex =>
+									 {
+										 MultiTry.Rethrow(ex);
+										 return default(int);
+									 };
+
+			var zero = 0;
+			try
+			{
+				MultiTry.Try(() => 1 / zero, options);
+			}
+			catch (DivideByZeroException dEx)
+			{
+				Trace.WriteLine(dEx);
+				Assert.IsTrue(dEx.ToString().Contains("ExceptionDispatchInfo"));
+			}
+
+			options = MultiTryOptions<int>.Default;
+			options.OnFinalFailure = ex => throw ex;
+			Trace.WriteLine("");
+			try
+			{
+				MultiTry.Try(() => 1 / zero, options);
+			}
+			catch (DivideByZeroException dEx)
+			{
+				Trace.WriteLine(dEx);
+				Assert.IsFalse(dEx.ToString().Contains("ExceptionDispatchInfo"));
+			}
+		}
+
 	}
 }

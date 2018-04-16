@@ -64,18 +64,19 @@ There is also a full commented example in tests, [FullExample.cs](https://github
 
 * **How to re-throw the exception and keep the stack trace?**
 
-Use [`ExceptionDispatchInfo.Capture()`](https://docs.microsoft.com/en-us/dotnet/api/system.runtime.exceptionservices.exceptiondispatchinfo.capture?f1url=https%3A%2F%2Fmsdn.microsoft.com%2Fquery%2Fdev15.query%3FappId%3DDev15IDEF1%26l%3DEN-US%26k%3Dk(System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture);k(TargetFrameworkMoniker-.NETFramework,Version%3Dv4.7.1);k(DevLang-csharp)%26rd%3Dtrue&view=netframework-4.7.2):
+`MultiTry.Rethrow(ex)` re-throws the exception using the original stack trace:
 ```
 var options = MultiTryOptions<int>.Default;
 options.OnFinalFailure = ex =>
 {
-	ExceptionDispatchInfo.Capture(ex)?.Throw();
+	MultiTry.Rethrow(ex);
 	return 42; //make compiler happy
 };
 
 var result = MultiTry.Try(() => MyMethod(1, "a", false), options);
-
 ```
+ `MultiTry.Rethrow(ex)` uses  [`ExceptionDispatchInfo.Capture()`](https://docs.microsoft.com/en-us/dotnet/api/system.runtime.exceptionservices.exceptiondispatchinfo.capture?f1url=https%3A%2F%2Fmsdn.microsoft.com%2Fquery%2Fdev15.query%3FappId%3DDev15IDEF1%26l%3DEN-US%26k%3Dk(System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture);k(TargetFrameworkMoniker-.NETFramework,Version%3Dv4.7.1);k(DevLang-csharp)%26rd%3Dtrue&view=netframework-4.7.2) to preserve the original stack trace, unlike `throw ex;`.
+
 * **How to use the exception filter?**
 
 See the documentation for "[when in a catch statement](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/when#when-in-a-catch-statement)".
