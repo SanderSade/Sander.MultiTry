@@ -146,6 +146,10 @@ options.OnFinalFailure = ex =>
   - No longer maintained or updated
   - Elephant when you need a butterfly
   - Complex to configure, overkill for most common scenarios
+
+* **But what about [Polly](https://github.com/App-vNext/Polly)?**  
+I recommend using Polly if you have more complex scenarios than MultiTry is intended to handle. That said, Polly can be complex to configure and pain to debug.
   
 ## Changelog
 * 1.0.0 Initial release
+* 1.0.1 Adding MultiTry.Rethrow() (re-throwing exception while keeping the original context)
